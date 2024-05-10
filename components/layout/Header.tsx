@@ -57,7 +57,7 @@ export default function Header(props: { title: string, desc: string, headerHide?
       <View
         style={{ flex: 1, width: "100%", alignItems: "center", marginTop: 12 }}
       >
-        <Text style={{ color: "white", fontSize: 16 }}>{props.desc}</Text>
+        <Text style={{ color: "white", fontSize: 14 }}>{props.desc}</Text>
       </View>
     </View>
   );

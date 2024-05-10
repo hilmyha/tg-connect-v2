@@ -61,7 +61,6 @@ export default function index() {
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "space-between",
               alignItems: "center",
               marginTop: 14,
             }}
@@ -69,7 +68,7 @@ export default function index() {
             <Text>Belum punya akun?</Text>
             <Pressable>
               <Link href={"(auth)/register"} asChild>
-                <Text style={{ textDecorationStyle: "dashed", textDecorationLine: "underline" }}>Daftar sekarang</Text>
+                <Text style={{ textDecorationStyle: "dashed", textDecorationLine: "underline", marginLeft: 4 }}>Daftar sekarang</Text>
               </Link>
             </Pressable>
           </View>
