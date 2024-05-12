@@ -15,7 +15,7 @@ type Props = {
   type?: TextInputProps["keyboardType"] | "password";
   onChangeText?: TextInputProps["onChangeText"];
   value?: string;
-  errors?: [];
+  errors?: string[];
   editable?: boolean;
 };
 

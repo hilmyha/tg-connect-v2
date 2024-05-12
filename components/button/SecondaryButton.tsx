@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default function PrimaryButton(props: Props) {
+export default function SecondaryButton(props: Props) {
   return (
     <TouchableOpacity onPress={props.onPress}>
       <View style={styles.container}>

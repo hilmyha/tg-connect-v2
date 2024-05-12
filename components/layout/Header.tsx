@@ -16,14 +16,18 @@ function HeaderIcon(props: {
   );
 }
 
-export default function Header(props: { title: string, desc: string, headerHide?: boolean}) {
+export default function Header(props: {
+  title: string;
+  desc: string;
+  headerHide?: boolean;
+}) {
   return (
     <View
       style={{
         paddingTop: 100,
         paddingHorizontal: 16,
         paddingBottom: 22,
-        backgroundColor: "#405B6A",
+        backgroundColor: "#4E6E81",
         flex: 1,
       }}
     >
@@ -41,11 +45,11 @@ export default function Header(props: { title: string, desc: string, headerHide?
             <HeaderIcon name="arrow-back" color="white" />
           </Pressable>
         )}
-        
+
         <Text
           style={{
-            fontSize: 32,
-            fontWeight: "bold",
+            fontSize: 28,
+            fontWeight: "900",
             color: "white",
           }}
         >
@@ -55,7 +59,7 @@ export default function Header(props: { title: string, desc: string, headerHide?
       </View>
 
       <View
-        style={{ flex: 1, width: "100%", alignItems: "center", marginTop: 12 }}
+        style={{ flex: 1, width: "100%", alignItems: "center", marginTop: 8 }}
       >
         <Text style={{ color: "white", fontSize: 14 }}>{props.desc}</Text>
       </View>

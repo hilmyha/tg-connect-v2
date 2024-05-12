@@ -9,10 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import Header from "../../../components/layout/Header";
-import { getInformasi } from "../../../services/InformasiService";
-import InformationCard from "../../../components/card/InformasiCard";
-import AddButton from "../../../components/button/AddButton";
-import { router } from "expo-router";
+import { getPanic } from "../../../services/PanicService";
 
 function SplashScreen() {
   return (
@@ -21,22 +18,22 @@ function SplashScreen() {
 }
 
 export default function index() {
-  const [informasi, setInformasi] = useState([]);
+  const [panic, setPanic] = useState([]);
 
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isEmpty, setIsEmpty] = useState(false);
 
   useEffect(() => {
-    const getDataInformasi = async () => {
+    const getDataPanic = async () => {
       try {
-        const response = await getInformasi();
+        const response = await getPanic();
         console.log("response", response);
 
         if (response.data.length === 0) {
           setIsEmpty(true);
         } else {
-          setInformasi(response.data);
+          setPanic(response.data);
         }
 
         setLoading(false);
@@ -45,23 +42,19 @@ export default function index() {
       }
     };
 
-    getDataInformasi();
+    getDataPanic();
   }, []);
 
   const onRefresh = () => {
     setRefreshing(true);
-    getInformasi().then((response) => {
-      setInformasi(response.data);
+    getPanic().then((response) => {
+      setPanic(response.data);
       setRefreshing(false);
     });
   };
 
-  const handleCreateInformasi = () => {
-    router.push("/(tabs)/informasi/create");
-  };
-
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView>
       <StatusBar style="light" backgroundColor="#405B6A" />
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -70,9 +63,9 @@ export default function index() {
         }
       >
         <Header
-          title="Informasi"
-          desc="Informasi terkini seputar RT 09."
-          headerHide={true}
+          title="Panic Log"
+          desc="Laporkan kejadian darurat disini."
+          headerHide={false}
         />
         <View
           style={{
@@ -82,26 +75,23 @@ export default function index() {
             gap: 14,
           }}
         >
-          <View style={{ flex: 1, gap: 12 }}>
-            {loading ? (
-              <SplashScreen />
-            ) : isEmpty ? (
-              <Text style={{ color: "red" }}>Data tidak ditemukan</Text>
-            ) : (
-              informasi.map((item: any) => (
-                <InformationCard
-                  key={item.id}
-                  title={item.judul}
-                  date={item.tanggal}
-                  time={item.waktu}
-                  desc={item.deskripsi}
-                />
-              ))
-            )}
-          </View>
+          {loading ? (
+            <SplashScreen />
+          ) : isEmpty ? (
+            <Text style={{ color: "red" }}>Data tidak ditemukan</Text>
+          ) : (
+            panic.map((item: any) => (
+              <View key={item.id}>
+                <Text>{item.id}</Text>
+                <Text>{item.user_id}</Text>
+                <Text>{item.latitude}</Text>
+                <Text>{item.longitude}</Text>
+                <Text>{item.created_at}</Text>
+              </View>
+            ))
+          )}
         </View>
       </ScrollView>
-      <AddButton title="+" onPress={handleCreateInformasi} />
     </SafeAreaView>
   );
 }

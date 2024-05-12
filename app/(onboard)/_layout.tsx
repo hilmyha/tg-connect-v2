@@ -7,11 +7,11 @@ export default function AppLayout() {
     <Stack>
       <Stack.Screen
         name="welcome"
-        options={{ headerShown: false, animation: "slide_from_right" }}
+        options={{ headerShown: false, animation: "ios" }}
       />
       <Stack.Screen
         name="daftar"
-        options={{ headerShown: false, animation: "slide_from_right" }}
+        options={{ headerShown: false, animation: "ios" }}
       />
     </Stack>
   );
