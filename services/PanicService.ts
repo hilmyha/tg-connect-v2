@@ -14,3 +14,7 @@ export async function createPanic(credentials: {
   await axios.post("panic", credentials);
 }
 
+export async function getPanicById(id: string) {
+  const { data } = await axios.get(`panic/${id}`);
+  return data;
+}

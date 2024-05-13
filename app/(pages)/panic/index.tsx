@@ -5,11 +5,14 @@ import {
   ScrollView,
   ActivityIndicator,
   RefreshControl,
+  Pressable,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import Header from "../../../components/layout/Header";
 import { getPanic } from "../../../services/PanicService";
+import PanicCard from "../../../components/card/PanicCard";
+import { router } from "expo-router";
 
 function SplashScreen() {
   return (
@@ -33,7 +36,16 @@ export default function index() {
         if (response.data.length === 0) {
           setIsEmpty(true);
         } else {
-          setPanic(response.data);
+          // ambil data create_at dan jadikan ke local time
+          const data = response.data.map((item: any) => {
+            const date = new Date(item.created_at);
+            return {
+              ...item,
+              created_at: date.toLocaleString(),
+            };
+          });
+
+          setPanic(data);
         }
 
         setLoading(false);
@@ -48,7 +60,16 @@ export default function index() {
   const onRefresh = () => {
     setRefreshing(true);
     getPanic().then((response) => {
-      setPanic(response.data);
+      const data = response.data.map((item: any) => {
+        // fix time
+        const date = new Date(item.created_at);
+        return {
+          ...item,
+          created_at: date.toLocaleString(),
+        };
+      });
+
+      setPanic(data);
       setRefreshing(false);
     });
   };
@@ -81,13 +102,22 @@ export default function index() {
             <Text style={{ color: "red" }}>Data tidak ditemukan</Text>
           ) : (
             panic.map((item: any) => (
-              <View key={item.id}>
-                <Text>{item.id}</Text>
-                <Text>{item.user_id}</Text>
-                <Text>{item.latitude}</Text>
-                <Text>{item.longitude}</Text>
-                <Text>{item.created_at}</Text>
-              </View>
+              <Pressable
+                key={item.id}
+                onPress={() =>
+                  router.push({
+                    pathname: "/(pages)/panic/detail",
+                    params: { id: item.id },
+                  })
+                }
+              >
+                <PanicCard
+                  id={item.id}
+                  time={item.created_at}
+                  latitude={item.latitude}
+                  longitude={item.longitude}
+                />
+              </Pressable>
             ))
           )}
         </View>

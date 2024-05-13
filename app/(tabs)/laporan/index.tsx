@@ -13,6 +13,7 @@ import AddButton from "../../../components/button/AddButton";
 import { router } from "expo-router";
 import { getLaporan } from "../../../services/LaporanService";
 import { Image } from "expo-image";
+import LaporanCard from "../../../components/card/LaporanCard";
 
 function SplashScreen() {
   return (
@@ -89,16 +90,22 @@ export default function index() {
               <Text style={{ color: "red" }}>Data tidak ditemukan</Text>
             ) : (
               laporan.map((item: any) => (
-                <View key={item.id}>
-                  <Text>{item.kategori}</Text>
-                  <Text>{item.perihal}</Text>
-                  <Text>{item.isi}</Text>
-                  {item.img_url ? (
-                    <Image source={{ uri: item.img_url }} />
-                  ) : (
-                    <Text>Tidak ada gambar</Text>
-                  )}
-                </View>
+                // <View key={item.id}>
+                //   <Text>{item.kategori}</Text>
+                //   <Text>{item.perihal}</Text>
+                //   <Text>{item.isi}</Text>
+                //   {item.img_url ? (
+                //     <Image source={{ uri: item.img_url }} />
+                //   ) : (
+                //     <Text>Tidak ada gambar</Text>
+                //   )}
+                // </View>
+                <LaporanCard
+                  key={item.id}
+                  title={item.perihal}
+                  isi={item.isi}
+                  kategori={item.kategori}
+                />
               ))
             )}
           </View>

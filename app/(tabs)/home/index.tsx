@@ -35,7 +35,8 @@ export default function index() {
         if (response.data.length === 0) {
           setIsEmpty(true);
         } else {
-          setInformasi(response.data);
+          // ambil 3 data terbaru
+          setInformasi(response.data.slice(0, 3));
         }
 
         setLoading(false);
@@ -50,7 +51,7 @@ export default function index() {
   const onRefresh = () => {
     setRefreshing(true);
     getInformasi().then((response) => {
-      setInformasi(response.data);
+      setInformasi(response.data.slice(0, 3));
       setRefreshing(false);
     });
   };

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Pressable,
   Alert,
+  Animated,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
@@ -19,6 +20,9 @@ export default function create() {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [pressStartTime, setPressStartTime] = useState(0);
+  const [durationText, setDurationText] = useState("");
+  const [panicSent, setPanicSent] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -37,34 +41,76 @@ export default function create() {
     })();
   }, []);
 
-  const handlePanic = () => {
+  useEffect(() => {
+    let timer: any;
+    if (pressStartTime) {
+      let countdown = 1;
+      timer = setInterval(() => {
+        if (countdown <= 3) {
+          setDurationText(`${countdown} detik`);
+          countdown++;
+        } else {
+          clearInterval(timer);
+          setDurationText("");
+          if (!panicSent) {
+            sendPanic();
+          }
+        }
+      }, 1000);
+    } else {
+      setDurationText("");
+    }
+
+    return () => clearInterval(timer);
+  }, [pressStartTime, panicSent]);
+
+  const handlePressIn = () => {
+    setPressStartTime(Date.now());
+    setPanicSent(false);
+  };
+
+  const handlePressOut = () => {
+    setDurationText("");
+    if (pressStartTime) {
+      const pressDuration = Math.ceil((Date.now() - pressStartTime) / 1000);
+      if (pressDuration >= 3) {
+        if (!panicSent) {
+          sendPanic();
+        }
+      } else {
+        Alert.alert(
+          "Peringatan",
+          "Tahan tombol selama 3 detik untuk mengirim data."
+        );
+      }
+    }
+    setPressStartTime(0);
+  };
+
+  const sendPanic = async () => {
+    try {
+      await createPanic({
+        latitude,
+        longitude,
+      });
+
+      console.log("Panic created");
+      router.push("/(pages)/panic/");
+      setPanicSent(true);
+    } catch (error) {
+      console.error("Error creating panic", error);
+    }
+  };
+
+  const handleHelp = () => {
     Alert.alert(
-      "Konfirmasi",
-      "Apakah anda yakin ingin melaporkan keadaan darurat?",
+      "Bantuan",
+      "Tekan tombol merah untuk melaporkan keadaan darurat. Pastikan anda dalam keadaan aman dan segera hubungi pihak berwajib. Terima kasih.",
       [
         {
-          text: "Batal",
+          text: "Tutup",
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel",
-        },
-        {
-          text: "Ya",
-          onPress: async () => {
-            // send location to server
-            console.log(location);
-
-            try {
-              await createPanic({
-                latitude,
-                longitude,
-              });
-
-              console.log("Panic created");
-              router.push("/(pages)/panic/");
-            } catch (error) {
-              console.error("Error creating panic", error);
-            }
-          },
         },
       ]
     );
@@ -101,10 +147,12 @@ export default function create() {
           <Pressable onPress={() => router.back()}>
             <Ionicons name="arrow-back" size={32} color="white" />
           </Pressable>
-          <Pressable onPress={() => console.log("pressed")}>
+          <Pressable onPress={handleHelp}>
             <Ionicons name="help-circle" size={32} color="white" />
           </Pressable>
         </View>
+
+        <Text style={{ color: "#ffffff", marginTop: 10 }}>{durationText}</Text>
         <TouchableOpacity
           style={{
             padding: 32,
@@ -112,7 +160,8 @@ export default function create() {
             backgroundColor: "#f87171",
             elevation: 5,
           }}
-          onPress={handlePanic}
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
         >
           <View
             style={{
