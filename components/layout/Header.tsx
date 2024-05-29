@@ -10,7 +10,7 @@ function HeaderIcon(props: {
   return (
     <Ionicons
       size={32}
-      style={{ marginBottom: -3, borderWidth: 1 }}
+      style={{ marginBottom: -3 }}
       {...props}
     />
   );
@@ -39,7 +39,7 @@ export default function Header(props: {
         }}
       >
         {props.headerHide ? (
-          <View style={{ borderWidth: 1, padding: 16 }}></View>
+          <View style={{ padding: 16 }}></View>
         ) : (
           <Pressable onPress={() => router.back()}>
             <HeaderIcon name="arrow-back" color="white" />
@@ -55,13 +55,15 @@ export default function Header(props: {
         >
           {props.title}
         </Text>
-        <View style={{ borderWidth: 1, padding: 16 }}></View>
+        <View style={{ padding: 16 }}></View>
       </View>
 
       <View
         style={{ flex: 1, width: "100%", alignItems: "center", marginTop: 8 }}
       >
-        <Text style={{ color: "white", fontSize: 14 }}>{props.desc}</Text>
+        <Text style={{ color: "white", fontSize: 14, textAlign: "center" }}>
+          {props.desc}
+        </Text>
       </View>
     </View>
   );

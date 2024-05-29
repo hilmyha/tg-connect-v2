@@ -1,7 +1,7 @@
 import { router, useSegments } from "expo-router";
 import { createContext, useContext, useEffect, useState } from "react";
 import { loadUser, login, logout, register } from "../services/AuthService";
-import { getToken } from "../services/TokenService";
+import { deleteToken, getToken } from "../services/TokenService";
 
 interface User {
   id: number;
@@ -125,6 +125,7 @@ export const AuthProvider = ({ children }: any) => {
     try {
       await logout();
       setAuthState({ user: null, token: null, authenticated: false });
+      deleteToken();
     } catch (error: any) {
       return error.response.data;
     }

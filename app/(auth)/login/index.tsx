@@ -6,6 +6,7 @@ import FormInput from "../../../components/form/FormInput";
 import PrimaryButton from "../../../components/button/PrimaryButton";
 import { Link } from "expo-router";
 import Header from "../../../components/layout/Header";
+import { getToken } from "../../../services/TokenService";
 
 export default function index() {
   const { onLogin } = useAuth();
@@ -27,6 +28,12 @@ export default function index() {
       setErrors(err);
     }
   };
+
+  const CheckToken = async () => {
+    getToken().then((res) => {
+      console.log(res);
+    });
+  }
 
   return (
     <SafeAreaView>
@@ -57,6 +64,7 @@ export default function index() {
             errors={errors?.password}
           />
           <PrimaryButton onPress={handleLogin} title="Login" />
+          <PrimaryButton onPress={CheckToken} title="Check token" />
 
           <View
             style={{

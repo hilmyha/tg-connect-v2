@@ -51,3 +51,17 @@ export async function recapData() {
 
   return data;
 }
+
+export async function showRecap() {
+  const { data } = await axios.get("show-recap");
+  console.log("data", data);
+
+  return data;
+}
+
+export async function downloadRecap(filename: string) {
+  const { data } = await axios.get(`download-recap/${filename}`);
+  console.log("data", data);
+
+  return data;
+}

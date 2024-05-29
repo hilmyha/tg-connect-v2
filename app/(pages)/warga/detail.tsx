@@ -8,7 +8,7 @@ import {
   Pressable,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { getWargaById } from "../../../services/WargaService";
 import { loadUser } from "../../../services/AuthService";
 import { StatusBar } from "expo-status-bar";
@@ -77,6 +77,13 @@ export default function detail() {
       ],
       { cancelable: false }
     );
+  };
+
+  const handleUpdate = () => {
+    router.push({
+      pathname: "(pages)/warga/update",
+      params: { id: id },
+    });
   };
 
   return (
@@ -203,7 +210,7 @@ export default function detail() {
               </View>
             </Pressable>
             {user === selectedWarga?.user_id && (
-              <Pressable onPress={handleWhatsapp}>
+              <Pressable onPress={handleUpdate}>
                 <View
                   style={{
                     backgroundColor: "#3b82f6",
