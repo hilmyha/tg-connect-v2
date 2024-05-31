@@ -15,12 +15,53 @@ export default function LaporanCard(props: any) {
         justifyContent: "space-between",
       }}
     >
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 12, width: 280 }}>
-        <Ionicons name="document-text" size={42} color="#374151" />
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 12,
+          width: 280,
+        }}
+      >
+        {props.kategori === "usulan" ? (
+          <Ionicons name="newspaper" size={30} color="#374151" />
+        ) : (
+          <Ionicons name="alert-circle" size={30} color="red" />
+        )}
         <View>
-          <Text style={{ fontWeight: '600', fontSize: 16 }}>{props.title}</Text>
-          <Text>{props.isi}</Text>
-          <Text>{props.kategori}</Text>
+          <Text
+            style={{
+              color: "#374151",
+              fontSize: 18,
+              fontWeight: "500",
+              textTransform: "capitalize",
+            }}
+          >
+            {props.title}
+          </Text>
+          <Text
+            style={{
+              color: "#6b7280",
+              fontSize: 14,
+              fontWeight: "400",
+              marginTop: 6,
+              textAlign: "justify",
+              textTransform: "capitalize",
+            }}
+          >
+            {props.kategori}
+          </Text>
+          <Text
+            style={{
+              color: "#374151",
+              fontSize: 16,
+              fontWeight: "500",
+              marginTop: 4,
+              textAlign: "justify",
+            }}
+          >
+            {props.isi}
+          </Text>
         </View>
       </View>
       <Ionicons name="chevron-forward" size={24} color="#d1d5db" />
