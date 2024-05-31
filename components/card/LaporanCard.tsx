@@ -15,7 +15,7 @@ export default function LaporanCard(props: any) {
         justifyContent: "space-between",
       }}
     >
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 12, width: 280 }}>
         <Ionicons name="document-text" size={42} color="#374151" />
         <View>
           <Text style={{ fontWeight: '600', fontSize: 16 }}>{props.title}</Text>
