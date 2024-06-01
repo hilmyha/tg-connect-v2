@@ -1,9 +1,16 @@
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  Pressable,
+} from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { getPanicById } from "../../../services/PanicService";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { Ionicons } from "@expo/vector-icons";
 
 type Location = {
   latitude: string;
@@ -82,10 +89,15 @@ export default function detail() {
           />
         )}
       </MapView>
-      <View style={{ position: "absolute", bottom: 12 }}>
-        <Text>
-          {location?.latitude}, {location?.longitude}, {id}
-        </Text>
+
+      <View style={{ position: "absolute", top: 12, left: 12 }}>
+        <View
+          style={{ backgroundColor: "#4E6E81", padding: 8, borderRadius: 14 }}
+        >
+          <Pressable onPress={router.back}>
+            <Ionicons name="arrow-back" size={24} color="white" />
+          </Pressable>
+        </View>
       </View>
     </View>
   );

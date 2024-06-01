@@ -17,6 +17,7 @@ import ProfileButton from "../../../components/button/ProfileButton";
 import { router } from "expo-router";
 import LogoutButton from "../../../components/button/LogoutButton";
 import AdminButton from "../../../components/button/AdminButton";
+import { Ionicons } from "@expo/vector-icons";
 
 function SplashScreen() {
   return (
@@ -112,16 +113,17 @@ export default function index() {
           desc="Lihat dan ubah informasi profil anda."
           headerHide={true}
         /> */}
+        <View style={{ backgroundColor: "#4E6E81", height: 160 }}></View>
         <View
           style={{
             paddingHorizontal: 16,
             paddingVertical: 24,
-            marginTop: 14,
+            marginTop: -80,
           }}
         >
           {authState!.authenticated && authState!.user ? (
             <View style={{ gap: 16 }}>
-              <View style={{ marginBottom: 20 }}>
+              {/* <View style={{ marginBottom: 20 }}>
                 <Text
                   style={{
                     fontWeight: "900",
@@ -134,7 +136,42 @@ export default function index() {
                 <Text>
                   Nikmati fitur-fitur yang kami sediakan untuk memudahkan anda
                 </Text>
+              </View> */}
+
+              <View style={{ flexDirection: "row", justifyContent: "center" }}>
+                <View
+                  style={{
+                    backgroundColor: "#6b7280",
+                    borderRadius: 100,
+                    padding: 28,
+                    marginBottom: 16,
+                  }}
+                >
+                  <Ionicons name="person" size={54} color="white" />
+                </View>
               </View>
+
+              <View>
+                <Text
+                  style={{
+                    fontWeight: "900",
+                    fontSize: 28,
+                    color: "#405B6A",
+                  }}
+                >
+                  {authState!.user.name}
+                </Text>
+                <Text>{authState!.user.email}</Text>
+              </View>
+
+              <View
+                style={{
+                  borderStyle: "solid",
+                  borderWidth: 0.6,
+                  marginVertical: 12,
+                  borderColor: "#e5e7eb",
+                }}
+              />
 
               <View style={{ gap: 8 }}>
                 {authState!.user.is_admin ? (
@@ -147,7 +184,10 @@ export default function index() {
                     />
                   ))
                 ) : (
-                  <View style={{ marginBottom: -12 }} />
+                  <Text>
+                    Anda bukan admin, silahkan hubungi admin untuk akses lebih
+                    lanjut
+                  </Text>
                 )}
                 <View
                   style={{
@@ -183,8 +223,8 @@ export default function index() {
           ) : (
             <SplashScreen />
           )}
-          <PrimaryButton title="Check token" onPress={CheckToken} />
-          <PrimaryButton title="Revoke token" onPress={revokeToken} />
+          {/* <PrimaryButton title="Check token" onPress={CheckToken} />
+          <PrimaryButton title="Revoke token" onPress={revokeToken} /> */}
         </View>
       </ScrollView>
     </SafeAreaView>
