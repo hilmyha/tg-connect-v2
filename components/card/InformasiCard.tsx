@@ -10,7 +10,15 @@ export default function InformationCard(props: any) {
       >
         <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
           <Ionicons name="newspaper" size={18} color="#374151" />
-          <Text style={{ color: "#374151", fontSize: 18, fontWeight: "500" }}>
+          <Text
+            style={{
+              color: "#374151",
+              fontSize: 18,
+              fontWeight: "500",
+              textDecorationLine: "underline",
+              textTransform: "capitalize",
+            }}
+          >
             {props.title}
           </Text>
         </View>
@@ -23,7 +31,7 @@ export default function InformationCard(props: any) {
             textAlign: "justify",
           }}
         >
-          {props.date}  | {props.time}
+          {props.date} | {props.time}
         </Text>
         <Text
           style={{

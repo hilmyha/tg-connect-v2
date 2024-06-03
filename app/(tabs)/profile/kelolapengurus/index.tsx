@@ -4,6 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import Header from "../../../../components/layout/Header";
 import { getUser } from "../../../../services/UserService";
 import { router } from "expo-router";
+import AdminCard from "../../../../components/card/AdminCard";
 
 export default function index() {
   const [user, setUser] = useState([]);
@@ -43,18 +44,12 @@ export default function index() {
                   params: { id: item.id },
                 })
               }
-              style={{
-                backgroundColor: "#f9fafb",
-                padding: 16,
-                borderTopStartRadius: 8,
-                borderTopEndRadius: 8,
-                borderBottomWidth: 1,
-                borderColor: "#d1d5db",
-              }}
             >
-              <Text>{item.name}</Text>
-              <Text>{item.email}</Text>
-              <Text>{item.is_admin ? "Admin" : "User"}</Text>
+              <AdminCard
+                name={item.name}
+                email={item.email}
+                is_admin={item.is_admin ? "Admin" : "User"}
+              />
             </Pressable>
           ))}
         </View>

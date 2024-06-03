@@ -64,7 +64,7 @@ export default function index() {
             errors={errors?.password}
           />
           <PrimaryButton onPress={handleLogin} title="Login" />
-          <PrimaryButton onPress={CheckToken} title="Check token" />
+          {/* <PrimaryButton onPress={CheckToken} title="Check token" /> */}
 
           <View
             style={{

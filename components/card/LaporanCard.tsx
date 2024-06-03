@@ -34,6 +34,7 @@ export default function LaporanCard(props: any) {
               color: "#374151",
               fontSize: 18,
               fontWeight: "500",
+              textDecorationLine: "underline",
               textTransform: "capitalize",
             }}
           >

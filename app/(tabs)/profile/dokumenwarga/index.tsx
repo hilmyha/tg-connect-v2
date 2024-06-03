@@ -95,11 +95,7 @@ export default function index() {
               <PrimaryButton title="Upload" onPress={handleDokumen} />
             </>
           ) : (
-            <Pressable onPress={pickImage}>
-              <Text style={{ textDecorationLine: "underline", color: "blue" }}>
-                Upload Gambar
-              </Text>
-            </Pressable>
+            <PrimaryButton title="Upload gambar" onPress={pickImage} />
           )}
         </View>
       </ScrollView>
