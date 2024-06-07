@@ -5,8 +5,6 @@ export default function AppLayout() {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false, animation: "ios" }} />
-      <Stack.Screen name="create" options={{ headerShown: false, animation: "ios" }} />
-      <Stack.Screen name="detail" options={{ headerShown: false, animation: "ios" }} />
     </Stack>
   );
 }

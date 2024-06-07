@@ -1,4 +1,10 @@
-import { View, Text, Pressable, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import React from "react";
 
 type Props = {
@@ -8,7 +14,7 @@ type Props = {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#4E6E81",
+    backgroundColor: "#dc2626",
     padding: 16,
     borderRadius: 10,
   },
@@ -17,7 +23,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "semibold",
     fontSize: 16,
-  }
+  },
 });
 
 export default function SecondaryButton(props: Props) {

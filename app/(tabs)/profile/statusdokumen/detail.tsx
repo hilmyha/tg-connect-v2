@@ -10,11 +10,14 @@ import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { router, useLocalSearchParams } from "expo-router";
 import {
+  deleteDokumenWarga,
   getDokumenWargaById,
   updateDokumen,
 } from "../../../../services/DokumenWargaService";
 import { Picker } from "@react-native-picker/picker";
 import PrimaryButton from "../../../../components/button/PrimaryButton";
+import { Image } from "expo-image";
+import SecondaryButton from "../../../../components/button/SecondaryButton";
 
 type Dokumen = {
   dokumen: string;
@@ -67,71 +70,93 @@ export default function detail() {
     }
   };
 
+  const handleDelete = async () => {
+    Alert.alert(
+      "Hapus Dokumen",
+      "Apakah anda yakin ingin menghapus dokumen ini?",
+      [
+        {
+          text: "Batal",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Hapus",
+          onPress: async () => {
+            try {
+              await deleteDokumenWarga(id ?? "");
+              router.push({ pathname: "(tabs)/profile/statusdokumen" });
+            } catch (error: any) {
+              console.error("Error deleting data:", error);
+            }
+          },
+        },
+      ]
+    );
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView
+      // buat style ditenagah page
+      style={{
+        flex: 1,
+        justifyContent: "center",
+      }}
+    >
       <StatusBar style="light" backgroundColor="#405B6A" />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      {/* buat view di center page */}
+      <View
+        style={{
+          padding: 32,
+        }}
+      >
         <View
           style={{
-            paddingHorizontal: 16,
-            paddingVertical: 24,
-            marginTop: 14,
+            flexDirection: "row",
+            alignContent: "space-between",
+            alignItems: "center",
+            marginBottom: 16,
           }}
         >
-          {/* buatkan UI seperti kartu yang menarik */}
-          <View
-            style={{
-              backgroundColor: "#f9fafb",
-              padding: 16,
-              borderRadius: 8,
+          <Switch
+            value={Boolean(dokumenData.keterangan)}
+            trackColor={{ false: "#767577", true: "#405B6A" }}
+            thumbColor={
+              Boolean(dokumenData?.keterangan) ? "#405B6A" : "#f4f3f4"
+            }
+            onValueChange={(value) => {
+              setDokumenData({ ...dokumenData, keterangan: Number(value) });
             }}
-          >
-            {/* <Switch
-              value={Boolean(dokumenData?.keterangan)}
-              trackColor={{ false: "#767577", true: "#405B6A" }}
-              thumbColor={
-                Boolean(dokumenData?.keterangan) ? "#405B6A" : "#f4f3f4"
-              }
-              onValueChange={(value) => {
-                setDokumenData({ ...dokumenData, keterangan: Number(value) });
-              }}
-            /> */}
-            <Picker
-              selectedValue={dokumenData?.keterangan}
-              onValueChange={(itemValue) =>
-                setDokumenData({ ...dokumenData, keterangan: itemValue })
-              }
-            >
-              <Picker.Item label="Belum Terverifikasi" value={0} />
-              <Picker.Item label="Terverifikasi" value={1} />
-            </Picker>
-
-            <PrimaryButton
-              onPress={() =>
-                Alert.alert(
-                  "Peringatan",
-                  "Apakah anda yakin ingin mengupdate data warga ini?",
-                  [
-                    {
-                      text: "Batal",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel",
-                    },
-                    {
-                      text: "Update",
-                      onPress: () => handleUpdate(),
-                    },
-                  ],
-                  { cancelable: false }
-                )
-              }
-              title="Update"
-            />
-
-            <Text style={{ color: "black", padding: 2 }}>{dokumenData?.keterangan}</Text>
-          </View>
+          />
+          <Text>
+            {dokumenData?.keterangan ? "Terverifikasi" : "Belum Terverifikasi"}
+          </Text>
         </View>
-      </ScrollView>
+        <View style={{ flexDirection: "column", gap: 8 }}>
+          <PrimaryButton
+            onPress={() =>
+              Alert.alert(
+                "Peringatan",
+                "Apakah anda yakin ingin mengupdate data warga ini?",
+                [
+                  {
+                    text: "Batal",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  {
+                    text: "Update",
+                    onPress: () => handleUpdate(),
+                  },
+                ],
+                { cancelable: false }
+              )
+            }
+            title="Update"
+          />
+          <SecondaryButton onPress={handleDelete} title="Hapus" />
+        </View>
+      </View>
     </SafeAreaView>
   );
 }

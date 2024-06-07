@@ -32,7 +32,12 @@ export async function createLaporan(data: {
   }
 }
 
-export async function deleteLaporan(id: number) {
+export async function getLaporanById(id: string) {
+  const response = await axiosFile.get(`laporan/${id}`);
+  return response;
+}
+
+export async function deleteLaporan(id: string) {
   const response = await axiosFile.delete(`laporan/${id}`);
   return response;
 }

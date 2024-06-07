@@ -8,10 +8,8 @@ export async function getInformasi() {
 }
 
 export async function getInformasiById(id: string) {
-  const { data } = await axios.get(`informasi/${id}`);
-  console.log("data", data);
-
-  return data;
+  const response = await axios.get(`informasi/${id}`);
+  return response;
 }
 
 export async function createInformasi(credentials: {
@@ -21,4 +19,8 @@ export async function createInformasi(credentials: {
   waktu: string;
 }) {
   await axios.post("informasi", credentials);
+}
+
+export async function deleteInformasi(id: string) {
+  await axios.delete(`informasi/${id}`);
 }

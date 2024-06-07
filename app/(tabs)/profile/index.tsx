@@ -18,6 +18,7 @@ import { router } from "expo-router";
 import LogoutButton from "../../../components/button/LogoutButton";
 import AdminButton from "../../../components/button/AdminButton";
 import { Ionicons } from "@expo/vector-icons";
+import { getDokumenWarga } from "../../../services/DokumenWargaService";
 
 function SplashScreen() {
   return (
@@ -27,6 +28,7 @@ function SplashScreen() {
 
 export default function index() {
   const { authState, onUser, onLogout } = useAuth();
+  const [dokumenWarga, setDokumenWarga] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -39,6 +41,21 @@ export default function index() {
       fetchUser();
     }
   }, [authState!.user, authState!.authenticated, onUser]);
+
+  useEffect(() => {
+    const fetchDokumenWarga = async () => {
+      try {
+        const response = await getDokumenWarga();
+        console.log("Dokumen Warga selected: ", response.data);
+
+        setDokumenWarga(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchDokumenWarga();
+  }, []);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -77,7 +94,7 @@ export default function index() {
     {
       title: "Riwayat",
       icon: "document-text",
-      onPress: () => console.log("Profile"),
+      onPress: () => router.push({ pathname: "(tabs)/profile/riwayat" }),
     },
   ];
 
@@ -123,21 +140,6 @@ export default function index() {
         >
           {authState!.authenticated && authState!.user ? (
             <View style={{ gap: 16 }}>
-              {/* <View style={{ marginBottom: 20 }}>
-                <Text
-                  style={{
-                    fontWeight: "900",
-                    fontSize: 28,
-                    color: "#405B6A",
-                  }}
-                >
-                  Selamat datang di aplikasi kami, {authState!.user.name}!
-                </Text>
-                <Text>
-                  Nikmati fitur-fitur yang kami sediakan untuk memudahkan anda
-                </Text>
-              </View> */}
-
               <View style={{ flexDirection: "row", justifyContent: "center" }}>
                 <View
                   style={{
@@ -162,6 +164,38 @@ export default function index() {
                   {authState!.user.name}
                 </Text>
                 <Text>{authState!.user.email}</Text>
+                {/* ambil dokumen warga user */}
+                <Text>
+                  {dokumenWarga.map((item: any) => {
+                    if (item.user_id == authState?.user?.id) {
+                      return item.keterangan == 1 ? (
+                        <Text
+                          key={item.id}
+                          style={{
+                            color: "green",
+                            fontWeight: "bold",
+                            fontSize: 12,
+                            marginTop: 4,
+                          }}
+                        >
+                          (Terverifikasi)
+                        </Text>
+                      ) : (
+                        <Text
+                          key={item.id}
+                          style={{
+                            color: "red",
+                            fontWeight: "bold",
+                            fontSize: 12,
+                            marginTop: 4,
+                          }}
+                        >
+                          (Belum Terverifikasi)
+                        </Text>
+                      );
+                    }
+                  })}
+                </Text>
               </View>
 
               <View
@@ -174,7 +208,7 @@ export default function index() {
               />
 
               <View style={{ gap: 8 }}>
-                {authState!.user.is_admin ? (
+                {authState!.user.is_admin != false ? (
                   adminMenuArr.map((item, index) => (
                     <AdminButton
                       key={index}
@@ -189,6 +223,7 @@ export default function index() {
                     lanjut
                   </Text>
                 )}
+
                 <View
                   style={{
                     borderStyle: "solid",
@@ -213,16 +248,12 @@ export default function index() {
                     borderColor: "#e5e7eb",
                   }}
                 />
-                <LogoutButton
-                  title="Logout"
-                  icon="log-out"
-                  onPress={handleLogout}
-                />
               </View>
             </View>
           ) : (
             <SplashScreen />
           )}
+          <LogoutButton title="Logout" icon="log-out" onPress={handleLogout} />
           {/* <PrimaryButton title="Check token" onPress={CheckToken} />
           <PrimaryButton title="Revoke token" onPress={revokeToken} /> */}
         </View>

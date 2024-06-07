@@ -5,12 +5,19 @@ import {
   ScrollView,
   ActivityIndicator,
   Pressable,
+  Platform,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import Header from "../../../../components/layout/Header";
-import { downloadRecap, showRecap } from "../../../../services/WargaService";
+import {
+  downloadRecap,
+  recapData,
+  showRecap,
+} from "../../../../services/WargaService";
 import PrimaryButton from "../../../../components/button/PrimaryButton";
+import * as FileSystem from "expo-file-system";
 
 function SplashScreen() {
   return (
@@ -38,13 +45,56 @@ export default function index() {
     fetchRecapData();
   }, []);
 
-  const handleDownloadRecap = async (filename: string) => {
-    // download recap dengan hit ke endpoint download-recap
+  const handleRecap = async () => {
     try {
-      const response = await downloadRecap(filename);
-      console.log("response", response);
+      await recapData();
+      // then fetch data again
+      const response = await showRecap();
+      setRecap(response.data);
+      
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleDownloadRecap = async (filename: any) => {
+    const filenames = `${filename}`;
+    const result = await FileSystem.downloadAsync(
+      `https://tgconnect.my.id/storage/${filename}`,
+      FileSystem.documentDirectory + filenames
+    );
+
+    console.log("result", result);
+
+    saveFile(result.uri, filenames, result.headers["content-type"]);
+  };
+
+  const saveFile = async (uri: any, filename: any, mimetype: any) => {
+    if (Platform.OS === "android") {
+      const permission =
+        await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+      if (permission.granted) {
+        const base64 = await FileSystem.readAsStringAsync(uri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        await FileSystem.StorageAccessFramework.createFileAsync(
+          permission.directoryUri,
+          filename,
+          mimetype
+        )
+          .then(async (uri) => {
+            await FileSystem.writeAsStringAsync(uri, base64, {
+              encoding: FileSystem.EncodingType.Base64,
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        Alert.alert("Permission required", "Permission required to save file");
+      }
+    } else {
+      Alert.alert("Permission required", "Permission required to save file");
     }
   };
 
@@ -61,7 +111,6 @@ export default function index() {
             gap: 14,
           }}
         >
-          <Text>Rekap data warga</Text>
           <View>
             {loading ? (
               <SplashScreen />
@@ -70,20 +119,43 @@ export default function index() {
             ) : (
               recap.map((item: any, index: any) => (
                 <Pressable
+                  style={{
+                    paddingVertical: 8,
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#d1d5db",
+                  }}
                   key={index}
-                  onPress={() => handleDownloadRecap(item)}
+                  onPress={() =>
+                    Alert.alert(
+                      "Download Rekap",
+                      "Apakah anda yakin ingin mendownload rekap?",
+                      [
+                        {
+                          text: "Batal",
+                          onPress: () => console.log("Cancel Pressed"),
+                          style: "cancel",
+                        },
+                        {
+                          text: "OK",
+                          onPress: () => handleDownloadRecap(item),
+                        },
+                      ]
+                    )
+                  }
                 >
-                  <Text>{item}</Text>
+                  {/* komposisi nama + tanggal */}
+                  <Text
+                    style={{
+                      color: "#405B6A",
+                    }}
+                  >
+                    Rekap tanggal - {new Date().toLocaleDateString()}
+                  </Text>
                 </Pressable>
               ))
             )}
           </View>
-          <PrimaryButton
-            title="Tambah Rekap"
-            onPress={() => {
-              console.log("Tambah Rekap");
-            }}
-          />
+          <PrimaryButton title="Tambah Rekap" onPress={handleRecap} />
         </View>
       </ScrollView>
     </SafeAreaView>

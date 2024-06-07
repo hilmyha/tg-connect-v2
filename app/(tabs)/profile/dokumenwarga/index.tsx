@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { StatusBar } from "expo-status-bar";
 import Header from "../../../../components/layout/Header";
@@ -21,6 +21,29 @@ export default function index() {
   const [keterangan, setKeterangan] = useState(false);
 
   const [error, setError] = useState<string[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== "granted") {
+        alert("Sorry, we need camera permissions to make this work!");
+      }
+    })();
+  }, []);
+
+  const takePhoto = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [16, 9],
+      quality: 1,
+    });
+
+    // set image dari hasil pick image
+    if (!result.canceled) {
+      setDokumen(result.assets[0].uri);
+    }
+  };
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -95,7 +118,15 @@ export default function index() {
               <PrimaryButton title="Upload" onPress={handleDokumen} />
             </>
           ) : (
-            <PrimaryButton title="Upload gambar" onPress={pickImage} />
+            <>
+              <Text style={{ fontSize: 14, color: "red" }}>
+                *Pastikan dokumen yang diupload jelas dan tidak terpotong
+              </Text>
+              <View style={{ flexDirection: "row", gap: 6 }}>
+                <PrimaryButton title="Ambil Foto" onPress={takePhoto} />
+                <PrimaryButton title="Pilih dari Library" onPress={pickImage} />
+              </View>
+            </>
           )}
         </View>
       </ScrollView>

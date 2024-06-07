@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  ScrollView,
-  Pressable,
-} from "react-native";
+import { View, Text, SafeAreaView, ScrollView, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import Header from "../../../../components/layout/Header";
@@ -14,7 +8,6 @@ import { Image } from "expo-image";
 
 export default function index() {
   const [dokumenWarga, setDokumenWarga] = useState([]);
-  const [image, setImage] = useState("");
 
   useEffect(() => {
     const fetchDokumenWarga = async () => {
@@ -25,8 +18,6 @@ export default function index() {
         console.log(error);
       }
     };
-
-    
 
     fetchDokumenWarga();
   }, []);
@@ -58,7 +49,10 @@ export default function index() {
               }
             >
               <Image
-                source={{ uri: `http://10.0.2.2:8000/storage/${item.dokumen}` }}
+                source={{
+                  uri: `https://tgconnect.my.id/storage/${item.dokumen}`,
+                }}
+                // source={{ uri: `http://10.0.2.2:8000/storage/${item.dokumen}` }}
                 style={{
                   width: "100%",
                   height: 200,
@@ -82,7 +76,7 @@ export default function index() {
                 >
                   {item.user.name}
                 </Text>
-                {item.keterangan === 0 ? (
+                {item.keterangan == 0 ? (
                   <Text
                     style={{
                       textDecorationLine: "underline",
@@ -90,7 +84,7 @@ export default function index() {
                       color: "red",
                     }}
                   >
-                    Belum diverifikasi
+                    Belum terverifikasi
                   </Text>
                 ) : (
                   <Text
@@ -100,7 +94,7 @@ export default function index() {
                       color: "green",
                     }}
                   >
-                    Sudah diverifikasi
+                    Sudah terverifikasi
                   </Text>
                 )}
               </View>

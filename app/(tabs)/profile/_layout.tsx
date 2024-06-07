@@ -10,6 +10,7 @@ export default function AppLayout() {
       <Stack.Screen name="kelolapengurus" options={{ headerShown: false, animation: "ios" }} />
       <Stack.Screen name="rekap" options={{ headerShown: false, animation: "ios" }} />
       <Stack.Screen name="statusdokumen" options={{ headerShown: false, animation: "ios" }} />
+      <Stack.Screen name="riwayat" options={{ headerShown: false, animation: "ios" }} />
     </Stack>
   );
 }

@@ -156,7 +156,7 @@ export default function detail() {
                 Keterangan
               </Text>
             </View>
-            {selectedWarga?.status_kependudukan === 1 ? (
+            {selectedWarga?.status_kependudukan == 1 ? (
               <View
                 style={{
                   backgroundColor: "#22c55e",
@@ -209,7 +209,7 @@ export default function detail() {
                 </Text>
               </View>
             </Pressable>
-            {user === selectedWarga?.user_id && (
+            {user == selectedWarga?.user_id && (
               <Pressable onPress={handleUpdate}>
                 <View
                   style={{

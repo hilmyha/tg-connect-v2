@@ -12,6 +12,8 @@ import Header from "../../../components/layout/Header";
 import MenuCard from "../../../components/card/MenuCard";
 import InformationCard from "../../../components/card/InformasiCard";
 import { getInformasi } from "../../../services/InformasiService";
+import { getLaporan } from "../../../services/LaporanService";
+import LaporanCard from "../../../components/card/LaporanCard";
 
 function SplashScreen() {
   return (
@@ -21,10 +23,12 @@ function SplashScreen() {
 
 export default function index() {
   const [informasi, setInformasi] = useState([]);
+  const [laporan, setLaporan] = useState([]);
 
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [isEmpty, setIsEmpty] = useState(false);
+  const [isInformasiEmpty, setIsInformasiEmpty] = useState(false);
+  const [isLaporanEmpty, setIsLaporanEmpty] = useState(false);
 
   useEffect(() => {
     const getDataInformasi = async () => {
@@ -33,7 +37,7 @@ export default function index() {
         console.log("response", response);
 
         if (response.data.length === 0) {
-          setIsEmpty(true);
+          setIsInformasiEmpty(true);
         } else {
           // ambil 3 data terbaru
           setInformasi(response.data.slice(0, 3));
@@ -41,17 +45,40 @@ export default function index() {
 
         setLoading(false);
       } catch (error) {
-        setIsEmpty(true);
+        setIsInformasiEmpty(true);
+      }
+    };
+
+    const getDataLaporan = async () => {
+      try {
+        const response = await getLaporan();
+        console.log("response", response);
+
+        if (response.data.length === 0) {
+          setIsLaporanEmpty(true);
+        } else {
+          // ambil 3 data terbaru
+          setLaporan(response.data.slice(0, 3));
+        }
+
+        setLoading(false);
+      } catch (error) {
+        setIsLaporanEmpty(true);
       }
     };
 
     getDataInformasi();
+    getDataLaporan();
   }, []);
 
   const onRefresh = () => {
     setRefreshing(true);
     getInformasi().then((response) => {
       setInformasi(response.data.slice(0, 3));
+      setRefreshing(false);
+    });
+    getLaporan().then((response) => {
+      setLaporan(response.data.slice(0, 3));
       setRefreshing(false);
     });
   };
@@ -68,8 +95,8 @@ export default function index() {
       iconame: "information-circle",
       icolor: "#D97706",
       bgcolor: "#F59E0B",
-      title: "Informasi",
-      link: "(pages)/warga",
+      title: "Informasi Pengurus",
+      link: "(pages)/informasipengurus",
     },
     {
       iconame: "megaphone",
@@ -123,7 +150,7 @@ export default function index() {
           <View style={{ flex: 1, gap: 12 }}>
             {loading ? (
               <SplashScreen />
-            ) : isEmpty ? (
+            ) : isInformasiEmpty ? (
               <Text style={{ color: "red" }}>Data tidak ditemukan</Text>
             ) : (
               informasi.map((item: any) => (
@@ -133,6 +160,24 @@ export default function index() {
                   date={item.tanggal}
                   time={item.waktu}
                   desc={item.deskripsi}
+                />
+              ))
+            )}
+
+            <Text style={{ fontWeight: "500", fontSize: 24, color: "#405B6A" }}>
+              Laporan Terbaru
+            </Text>
+            {loading ? (
+              <SplashScreen />
+            ) : isLaporanEmpty ? (
+              <Text style={{ color: "red" }}>Data tidak ditemukan</Text>
+            ) : (
+              laporan.map((item: any) => (
+                <LaporanCard
+                  key={item.id}
+                  title={item.perihal}
+                  isi={item.isi}
+                  kategori={item.kategori}
                 />
               ))
             )}

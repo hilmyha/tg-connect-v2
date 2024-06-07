@@ -108,12 +108,17 @@ export default function detail() {
                 <Text style={{ fontWeight: "bold" }}>
                   Nama : {userData.name}{" "}
                 </Text>
-                <Text>Status : {userData?.is_admin ? "Admin" : "User"}</Text>
+                <Text>
+                  Status : {userData.is_admin == 1 ? "Admin" : "User"}
+                </Text>
               </View>
               <Switch
-                value={Boolean(userData?.is_admin)}
+                value={Boolean(userData?.is_admin == 1)}
                 trackColor={{ false: "#767577", true: "#405B6A" }}
-                thumbColor={Boolean(userData?.is_admin) ? "#405B6A" : "#f4f3f4"}
+                // thumbColor={Boolean(userData?.is_admin) == true ? "#405B6A" : "#f4f3f4"}
+                thumbColor={
+                  Boolean(userData?.is_admin) == true ? "#f4f3f4" : "#405B6A"
+                }
                 onValueChange={(value) =>
                   setUserData({ ...userData, is_admin: Number(value) })
                 }

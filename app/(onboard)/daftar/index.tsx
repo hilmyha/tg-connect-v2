@@ -18,8 +18,13 @@ export default function index() {
 
   const [selectedStatusKependudukan, setSelectedStatusKependudukan] =
     useState();
+  const [error, setError] = useState<string[]>([]);
 
   const handleDaftar = async () => {
+    if (!namaKK || !blok || !jalan || !jumlahKeluarga || !nomorHp) {
+      setError(["Semua kolom harus diisi."]);
+      return;
+    }
     try {
       await createWarga({
         nama_kk: namaKK,
@@ -61,28 +66,28 @@ export default function index() {
             onChangeText={(text) => setNamaKK(text)}
             value={namaKK}
             type="default"
-            // errors={errors?.namaKK}
+            errors={error}
           />
           <FormInput
             placeholder={"Blok"}
             onChangeText={(text) => setBlok(text)}
             value={blok}
             type="default"
-            // errors={errors?.username}
+            errors={error}
           />
           <FormInput
             placeholder={"Jalan"}
             onChangeText={(text) => setJalan(text)}
             value={jalan}
             type="default"
-            // errors={errors?.email}
+            errors={error}
           />
           <FormInput
             placeholder={"Jumlah Keluarga"}
             onChangeText={(text) => setJumlahKeluarga(text)}
             value={jumlahKeluarga.toString()}
             type="number-pad"
-            // errors={errors?.username}
+            errors={error}
           />
           <View style={{ backgroundColor: "white", borderRadius: 10 }}>
             <Picker
@@ -104,7 +109,7 @@ export default function index() {
             onChangeText={(text) => setNomorHp(text)}
             value={nomorHp}
             type="phone-pad"
-            // errors={errors?.username}
+            errors={error}
           />
           <Text style={{ fontSize: 12 }}>
             Jangan lupa untuk melampirkan Kartu Keluarga anda pada menu profil

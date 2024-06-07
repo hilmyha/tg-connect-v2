@@ -45,3 +45,7 @@ export async function updateDokumen(
   const response = await axios.put(`dokumen-warga/${id}`, data);
   return response;
 }
+
+export async function deleteDokumenWarga(id: string) {
+  await axios.delete(`dokumen-warga/${id}`);
+}

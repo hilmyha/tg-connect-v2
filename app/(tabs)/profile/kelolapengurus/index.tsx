@@ -48,7 +48,7 @@ export default function index() {
               <AdminCard
                 name={item.name}
                 email={item.email}
-                is_admin={item.is_admin ? "Admin" : "User"}
+                is_admin={item.is_admin == true ? "Admin" : "User"}
               />
             </Pressable>
           ))}

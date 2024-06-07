@@ -2,16 +2,16 @@ import axiosLib from "axios";
 import { getToken } from "../services/TokenService";
 
 const axios = axiosLib.create({
-  // baseURL: "https://tgconnect.vercel.app/api/api/",
-  baseURL: "http://10.0.2.2:8000/api/",
+  baseURL: "https://tgconnect.my.id/api/",
+  // baseURL: "http://10.0.2.2:8000/api/",
   headers: {
     Accept: "application/json",
   },
 });
 
 const axiosFile = axiosLib.create({
-  // baseURL: "https://tgconnect.vercel.app/api/api/",
-  baseURL: "http://10.0.2.2:8000/api/",
+  baseURL: "https://tgconnect.my.id/api/",
+  // baseURL: "http://10.0.2.2:8000/api/",
   headers: {
     Accept: "application/json",
     "Content-Type": "multipart/form-data",

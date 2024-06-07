@@ -5,6 +5,7 @@ import {
   ScrollView,
   ActivityIndicator,
   RefreshControl,
+  Pressable,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
@@ -89,13 +90,22 @@ export default function index() {
               <Text style={{ color: "red" }}>Data tidak ditemukan</Text>
             ) : (
               informasi.map((item: any) => (
-                <InformationCard
+                <Pressable
                   key={item.id}
-                  title={item.judul}
-                  date={item.tanggal}
-                  time={item.waktu}
-                  desc={item.deskripsi}
-                />
+                  onPress={() =>
+                    router.push({
+                      pathname: "(tabs)/informasi/detail",
+                      params: { id: item.id },
+                    })
+                  }
+                >
+                  <InformationCard
+                    title={item.judul}
+                    date={item.tanggal}
+                    time={item.waktu}
+                    desc={item.deskripsi}
+                  />
+                </Pressable>
               ))
             )}
           </View>

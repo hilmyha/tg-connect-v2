@@ -29,12 +29,37 @@ export default function create() {
 
   const [error, setError] = useState<string[]>([]);
 
+  useEffect(() => {
+    (async () => {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== "granted") {
+        alert("Sorry, we need camera permissions to make this work!");
+      }
+    })();
+  }, []);
+
+  const takePhoto = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      // aspect: [4, 3],
+      aspect: [16, 9],
+      quality: 1,
+    });
+
+    // set image dari hasil pick image
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      // aspect: [4, 3],
+      aspect: [16, 9],
       quality: 1,
     });
 
@@ -126,11 +151,7 @@ export default function create() {
           {image ? (
             <Image source={{ uri: image }} style={styles.image} />
           ) : (
-            <Pressable onPress={pickImage}>
-              <Text style={{ textDecorationLine: "underline", color: "blue" }}>
-                Upload Gambar
-              </Text>
-            </Pressable>
+            <PrimaryButton title="Ambil Foto" onPress={takePhoto} />
           )}
 
           <PrimaryButton title="Kirim" onPress={handleLaporan} />
