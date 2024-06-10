@@ -16,7 +16,11 @@ export default function AppLayout() {
         name="home"
         options={{
           headerShown: false,
-          tabBarShowLabel: false,
+          tabBarShowLabel: true,
+          tabBarLabelStyle: {
+            textTransform: "capitalize",
+            fontWeight: "bold",
+          },
           tabBarActiveTintColor: "#4E6E81",
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
@@ -25,7 +29,11 @@ export default function AppLayout() {
         name="informasi"
         options={{
           headerShown: false,
-          tabBarShowLabel: false,
+          tabBarShowLabel: true,
+          tabBarLabelStyle: {
+            textTransform: "capitalize",
+            fontWeight: "bold",
+          },
           tabBarActiveTintColor: "#4E6E81",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="document-text" color={color} />
@@ -36,19 +44,27 @@ export default function AppLayout() {
         name="laporan"
         options={{
           headerShown: false,
-          tabBarShowLabel: false,
+          tabBarShowLabel: true,
+          tabBarLabelStyle: {
+            textTransform: "capitalize",
+            fontWeight: "bold",
+          },
           tabBarActiveTintColor: "#4E6E81",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="file-tray-full" color={color} />
           ),
         }}
       />
-      
+
       <Tabs.Screen
         name="profile"
         options={{
           headerShown: false,
-          tabBarShowLabel: false,
+          tabBarShowLabel: true,
+          tabBarLabelStyle: {
+            textTransform: "capitalize",
+            fontWeight: "bold",
+          },
           tabBarActiveTintColor: "#4E6E81",
           tabBarIcon: ({ color }) => <TabBarIcon name="person" color={color} />,
         }}

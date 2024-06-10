@@ -22,10 +22,6 @@ import SecondaryButton from "../../../../components/button/SecondaryButton";
 type Dokumen = {
   dokumen: string;
   keterangan: number;
-  // user: {
-  //   name: string;
-  //   is_admin: number;
-  // };
 };
 
 export default function detail() {
@@ -33,10 +29,6 @@ export default function detail() {
   const [dokumenData, setDokumenData] = useState<Dokumen>({
     dokumen: "",
     keterangan: 0,
-    // user: {
-    //   name: "",
-    //   is_admin: 0,
-    // },
   });
 
   useEffect(() => {

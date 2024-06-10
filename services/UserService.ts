@@ -7,6 +7,13 @@ export async function getUser() {
   return data;
 }
 
+export async function getPubUser() {
+  const { data } = await axios.get("get-user");
+  console.log("data from server", data);
+
+  return data;
+}
+
 export async function getUserById(id: string) {
   const { data } = await axios.get(`admin/${id}`);
   console.log("data from server", data);

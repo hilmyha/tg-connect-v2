@@ -6,7 +6,7 @@ import FormInput from "../../../components/form/FormInput";
 import PrimaryButton from "../../../components/button/PrimaryButton";
 import { Link } from "expo-router";
 import Header from "../../../components/layout/Header";
-import { getToken } from "../../../services/TokenService";
+import { deleteToken, getToken } from "../../../services/TokenService";
 
 export default function index() {
   const { onLogin } = useAuth();
@@ -27,6 +27,10 @@ export default function index() {
       const err = error.response.data.errors;
       setErrors(err);
     }
+  };
+
+  const revokeToken = async () => {
+    await deleteToken();
   };
 
   const CheckToken = async () => {
@@ -78,6 +82,18 @@ export default function index() {
               <Link href={"(auth)/register"} asChild>
                 <Text style={{ textDecorationStyle: "dashed", textDecorationLine: "underline", marginLeft: 4 }}>Daftar sekarang</Text>
               </Link>
+            </Pressable>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              // marginTop: 2,
+            }}
+          >
+            <Text>Tidak dapat login?</Text>
+            <Pressable onPress={revokeToken}>
+                <Text style={{ textDecorationStyle: "dashed", textDecorationLine: "underline", marginLeft: 4 }}>Hapus token</Text>
             </Pressable>
           </View>
         </View>

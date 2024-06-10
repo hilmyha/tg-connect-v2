@@ -31,6 +31,8 @@ export default function index() {
   const [dokumenWarga, setDokumenWarga] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
+  const [isEmpty, setIsEmpty] = useState(false);
+
   useEffect(() => {
     if (!authState!.user && authState!.authenticated) {
       const fetchUser = async () => {
@@ -47,10 +49,13 @@ export default function index() {
       try {
         const response = await getDokumenWarga();
         console.log("Dokumen Warga selected: ", response.data);
-
-        setDokumenWarga(response.data);
+        if (response.data.length === 0) {
+          setIsEmpty(true);
+        } else {
+          setDokumenWarga(response.data);
+        }
       } catch (error) {
-        console.log(error);
+        setIsEmpty(true);
       }
     };
 
@@ -75,13 +80,13 @@ export default function index() {
   };
 
   function handleLogout() {
-    Alert.alert("Logout", "Are you sure you want to logout?", [
+    Alert.alert("Logout", "apakah anda yakin ingin meninggalkan aplikasi?", [
       {
-        text: "Cancel",
+        text: "Tidak",
         onPress: () => console.log("Cancel Pressed"),
         style: "cancel",
       },
-      { text: "OK", onPress: () => onLogout && onLogout() },
+      { text: "Ya", onPress: () => onLogout && onLogout() },
     ]);
   }
 
@@ -163,39 +168,81 @@ export default function index() {
                 >
                   {authState!.user.name}
                 </Text>
-                <Text>{authState!.user.email}</Text>
-                {/* ambil dokumen warga user */}
-                <Text>
-                  {dokumenWarga.map((item: any) => {
-                    if (item.user_id == authState?.user?.id) {
-                      return item.keterangan == 1 ? (
-                        <Text
-                          key={item.id}
-                          style={{
-                            color: "green",
-                            fontWeight: "bold",
-                            fontSize: 12,
-                            marginTop: 4,
-                          }}
-                        >
-                          (Terverifikasi)
-                        </Text>
-                      ) : (
-                        <Text
-                          key={item.id}
-                          style={{
-                            color: "red",
-                            fontWeight: "bold",
-                            fontSize: 12,
-                            marginTop: 4,
-                          }}
-                        >
-                          (Belum Terverifikasi)
-                        </Text>
-                      );
-                    }
-                  })}
+                <Text
+                  style={{
+                    marginBottom: 6,
+                    textDecorationLine: "underline",
+                    color: "#405B6A",
+                  }}
+                >
+                  {authState!.user.email}
                 </Text>
+                {/* ambil dokumen warga user */}
+                {dokumenWarga.map((item: any) => {
+                  if (item.user_id == authState?.user?.id) {
+                    return item.keterangan == 1 ? (
+                      <View
+                        key={item.id}
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: 6,
+                        }}
+                      >
+                        <View
+                          style={{
+                            padding: 2,
+                            borderRadius: 100,
+                            backgroundColor: "green",
+                            alignItems: "center",
+                            marginRight: 4,
+                          }}
+                        >
+                          <Ionicons name="checkmark" size={12} color="white" />
+                        </View>
+                        <Text
+                          style={{
+                            color: "gray",
+                            fontWeight: "bold",
+                            fontSize: 12,
+                          }}
+                        >
+                          Dokumen Terverifikasi
+                        </Text>
+                      </View>
+                    ) : (
+                      <View
+                        key={item.id}
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: 6,
+                        }}
+                      >
+                        <View
+                          style={{
+                            padding: 2,
+                            borderRadius: 100,
+                            backgroundColor: "red",
+                            alignItems: "center",
+                            marginRight: 4,
+                          }}
+                        >
+                          <Ionicons name="remove" size={12} color="white" />
+                        </View>
+                        <Text
+                          style={{
+                            color: "gray",
+                            fontWeight: "bold",
+                            fontSize: 12,
+                          }}
+                        >
+                          Dokumen belum Terverifikasi
+                        </Text>
+                      </View>
+                    );
+                  }
+                })}
               </View>
 
               <View
@@ -218,9 +265,16 @@ export default function index() {
                     />
                   ))
                 ) : (
-                  <Text>
-                    Anda bukan admin, silahkan hubungi admin untuk akses lebih
-                    lanjut
+                  <Text
+                    style={{
+                      color: "#405B6A",
+                      fontSize: 14,
+                      fontWeight: "500",
+                      marginBottom: 12,
+                    }}
+                  >
+                    Terimakasih telah menggunakan aplikasi ini. Silahkan upload
+                    scan kartu keluarga anda untuk verifikasi data.
                   </Text>
                 )}
 

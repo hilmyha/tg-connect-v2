@@ -51,7 +51,6 @@ export default function index() {
       // then fetch data again
       const response = await showRecap();
       setRecap(response.data);
-      
     } catch (error) {
       console.log(error);
     }
@@ -91,10 +90,16 @@ export default function index() {
             console.error(error);
           });
       } else {
-        Alert.alert("Permission required", "Permission required to save file");
+        Alert.alert(
+          "Perizinan diperlukan",
+          "Perizinan diperlukan untuk menyimpan file"
+        );
       }
     } else {
-      Alert.alert("Permission required", "Permission required to save file");
+      Alert.alert(
+        "Perizinan diperlukan",
+        "Perizinan diperlukan untuk menyimpan file"
+      );
     }
   };
 
@@ -136,7 +141,7 @@ export default function index() {
                           style: "cancel",
                         },
                         {
-                          text: "OK",
+                          text: "Iya",
                           onPress: () => handleDownloadRecap(item),
                         },
                       ]
@@ -149,13 +154,36 @@ export default function index() {
                       color: "#405B6A",
                     }}
                   >
-                    Rekap tanggal - {new Date().toLocaleDateString()}
+                    Rekap data pada | {item.split("-")[4]} - {item.split("-")[3]} -{" "}
+                    {item.split("-")[2]}
                   </Text>
                 </Pressable>
               ))
             )}
           </View>
-          <PrimaryButton title="Tambah Rekap" onPress={handleRecap} />
+          <Text style={{ color: "red" }}>
+            *Klik untuk mendownload rekap data
+          </Text>
+          <PrimaryButton
+            title="Tambah Rekap"
+            onPress={() =>
+              Alert.alert(
+                "Tambah Rekap",
+                "Apakah anda yakin ingin menambah rekap?",
+                [
+                  {
+                    text: "Batal",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  {
+                    text: "Iya",
+                    onPress: () => handleRecap(),
+                  },
+                ]
+              )
+            }
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

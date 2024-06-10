@@ -94,19 +94,27 @@ export default function detail() {
             gap: 14,
           }}
         >
-          <Text
+          <View
             style={{
-              color: "#6b7280",
-              fontSize: 14,
-              fontWeight: "400",
-              marginTop: 6,
-              textAlign: "justify",
+              backgroundColor: "white",
+              padding: 16,
+              borderRadius: 8,
             }}
           >
-            Dilaksanakan pada {selectedInformasi?.tanggal} pukul{" "}
-            {selectedInformasi?.waktu}
-          </Text>
-          <Text style={{ fontSize: 16 }}>{selectedInformasi?.deskripsi}</Text>
+            <Text
+              style={{
+                color: "#6b7280",
+                fontSize: 13,
+                fontWeight: "400",
+              }}
+            >
+              Pada hari {selectedInformasi?.tanggal} pukul{" "}
+              {selectedInformasi?.waktu}
+            </Text>
+            <Text style={{ fontSize: 16, color: "#405B6A", marginTop: 12 }}>
+              {selectedInformasi?.deskripsi}
+            </Text>
+          </View>
           {user == selectedInformasi?.user_id && (
             <SecondaryButton title="Hapus" onPress={handleDelete} />
           )}

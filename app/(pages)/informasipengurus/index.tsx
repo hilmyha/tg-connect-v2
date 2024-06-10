@@ -9,7 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import Header from "../../../components/layout/Header";
-import { getUser } from "../../../services/UserService";
+import { getPubUser } from "../../../services/UserService";
 import PengurusCard from "../../../components/card/PengurusCard";
 import { router } from "expo-router";
 import { getWarga } from "../../../services/WargaService";
@@ -29,7 +29,7 @@ export default function index() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getUser();
+        const response = await getPubUser();
         setUser(response.data);
         setLoading(false);
       } catch (error) {

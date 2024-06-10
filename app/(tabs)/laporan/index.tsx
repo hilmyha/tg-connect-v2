@@ -111,7 +111,7 @@ export default function index() {
           </View>
         </View>
       </ScrollView>
-      <AddButton title="+" onPress={handleCreateLaporan} />
+      <AddButton title="+" keterangan="Buat Laporan / Usulan" onPress={handleCreateLaporan} />
     </SafeAreaView>
   );
 }

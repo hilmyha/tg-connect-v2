@@ -91,21 +91,39 @@ export default function detail() {
             gap: 14,
           }}
         >
-          {selectedLaporan?.img_url ? (
-            <Image
-              source={{
-                uri: `https://tgconnect.my.id/storage/${selectedLaporan.img_url}`,
-              }}
-              style={{
-                width: "100%",
-                height: 300,
-                marginBottom: 12,
-              }}
-            />
-          ) : (
-            <Text>Tidak ada gambar</Text>
-          )}
-          <Text style={{ fontSize: 16 }}>{selectedLaporan?.isi}</Text>
+          <View
+            style={{
+              backgroundColor: "white",
+              padding: 16,
+              borderRadius: 14,
+            }}
+          >
+            {selectedLaporan?.img_url ? (
+              <Image
+                source={{
+                  uri: `https://tgconnect.my.id/storage/${selectedLaporan.img_url}`,
+                }}
+                style={{
+                  width: "100%",
+                  aspectRatio: 16 / 9,
+                  borderRadius: 8,
+                }}
+              />
+            ) : (
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: "red",
+                  textDecorationLine: "underline",
+                }}
+              >
+                Tidak ada gambar
+              </Text>
+            )}
+            <Text style={{ fontSize: 16, color: "#405B6A", marginTop: 8 }}>
+              {selectedLaporan?.isi}
+            </Text>
+          </View>
           {user == selectedLaporan?.user_id && (
             <SecondaryButton title="Hapus" onPress={handleDelete} />
           )}

@@ -130,7 +130,7 @@ export default function index() {
             dokumenWarga.map((item: any) => {
               if (authState!.user && item.user_id == authState!.user.id) {
                 return (
-                  <>
+                  <View key={item.id}>
                     <Image
                       source={{
                         uri: `https://tgconnect.my.id/storage/${item.dokumen}`,
@@ -181,7 +181,7 @@ export default function index() {
                         </Text>
                       )}
                     </View>
-                  </>
+                  </View>
                 );
               }
             })

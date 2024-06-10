@@ -11,24 +11,66 @@ import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { StatusBar } from "expo-status-bar";
 import Header from "../../../../components/layout/Header";
-import { createDokumenWarga } from "../../../../services/DokumenWargaService";
+import {
+  createDokumenWarga,
+  getDokumenWarga,
+  getDokumenWargaById,
+} from "../../../../services/DokumenWargaService";
 import { router } from "expo-router";
 import { Image } from "expo-image";
 import PrimaryButton from "../../../../components/button/PrimaryButton";
+import { useAuth } from "../../../../contexts/AuthContext";
+
+type Dokumen = {
+  dokumen: string;
+  keterangan: number;
+};
 
 export default function index() {
   const [dokumen, setDokumen] = useState("");
+  const [dokumenWarga, setDokumenWarga] = useState([]);
+  const { authState, onUser } = useAuth();
   const [keterangan, setKeterangan] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   const [error, setError] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!authState!.user && authState!.authenticated) {
+      const fetchUser = async () => {
+        if (onUser) {
+          await onUser();
+        }
+      };
+      fetchUser();
+    }
+  }, [authState!.user, authState!.authenticated, onUser]);
 
   useEffect(() => {
     (async () => {
       const { status } = await ImagePicker.requestCameraPermissionsAsync();
       if (status !== "granted") {
-        alert("Sorry, we need camera permissions to make this work!");
+        alert("Maaf, kami memerlukan izin kamera untuk membuat ini bekerja!");
       }
     })();
+  }, []);
+
+  useEffect(() => {
+    const fetchDokumenWarga = async () => {
+      try {
+        const response = await getDokumenWarga();
+
+        if (response.data.length == 0) {
+          setIsEmpty(true);
+        } else {
+          setDokumenWarga(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchDokumenWarga();
   }, []);
 
   const takePhoto = async () => {
@@ -85,8 +127,9 @@ export default function index() {
 
   const styles = StyleSheet.create({
     image: {
-      width: 300,
-      height: 200,
+      width: "100%",
+      aspectRatio: 16 / 9,
+      marginBottom: 12,
     },
     picker: {
       backgroundColor: "white",
@@ -127,6 +170,60 @@ export default function index() {
                 <PrimaryButton title="Pilih dari Library" onPress={pickImage} />
               </View>
             </>
+          )}
+
+          {isEmpty ? (
+            <Text style={{ color: "red" }}>Data tidak ditemukan</Text>
+          ) : (
+            dokumenWarga.map(
+              (item: any) =>
+                // ambil data berdasarkan user_id yang login
+                item.user_id == authState!.user?.id && (
+                  <Pressable
+                    key={item.id}
+                    style={{
+                      paddingVertical: 8,
+                    }}
+                    onPress={() =>
+                      router.push({
+                        pathname: "(tabs)/profile/dokumenwarga/detail",
+                        params: { id: item.id },
+                      })
+                    }
+                  >
+                    <View>
+                      <Image
+                        source={{
+                          uri: `https://tgconnect.my.id/storage/${item.dokumen}`,
+                        }}
+                        style={styles.image}
+                      />
+
+                      {item.keterangan == 0 ? (
+                        <Text
+                          style={{
+                            textDecorationLine: "underline",
+                            fontSize: 12,
+                            color: "red",
+                          }}
+                        >
+                          Belum terverifikasi
+                        </Text>
+                      ) : (
+                        <Text
+                          style={{
+                            textDecorationLine: "underline",
+                            fontSize: 12,
+                            color: "green",
+                          }}
+                        >
+                          Sudah terverifikasi
+                        </Text>
+                      )}
+                    </View>
+                  </Pressable>
+                )
+            )
           )}
         </View>
       </ScrollView>
